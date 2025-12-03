@@ -1,10 +1,12 @@
 import clientPromise from '@/lib/mongodb';
 
+// Search teams by name
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
 
+    // If no query provided, return empty array
     if (!query) {
       return Response.json({ teams: [] });
     }
