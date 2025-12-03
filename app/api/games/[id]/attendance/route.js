@@ -5,18 +5,20 @@ export async function POST(request, { params }) {
   try {
     const gameId = params.id;
     const { userId, status } = await request.json();
-
+    // Validate input
     if (!userId || !status || !['in', 'out'].includes(status)) {
       return Response.json({ error: 'Invalid data' }, { status: 400 });
     }
 
     const client = await clientPromise;
     const db = client.db('lineup');
-    
+
+    // Check if game exists
     const game = await db.collection('games').findOne({ 
       _id: new ObjectId(gameId) 
     });
 
+    // If game not found, return 404
     if (!game) {
       return Response.json({ error: 'Game not found' }, { status: 404 });
     }
